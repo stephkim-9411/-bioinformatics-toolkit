@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage:
-# bash 00.download_sra_runinfo.sh PRJNA1051047
+# bash 00.download_sra_runinfo.sh <BioProject_ID>
 
 if [ -z "$1" ]; then
     echo "Usage: bash 00.download_sra_runinfo.sh <BioProject_ID>"
