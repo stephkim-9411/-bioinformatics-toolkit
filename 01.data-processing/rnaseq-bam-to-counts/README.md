@@ -47,3 +47,20 @@ logs/
 - Ensure the BAM files and GTF annotation use the **same reference genome** (e.g., GRCh38).
 - Ensure chromosome naming is consistent between BAM and GTF (e.g., `chr1` vs `1`).
 - This workflow is designed for **paired-end RNA-seq** data.
+
+## Author
+
+**Stephanie Kim**  
+Ph.D. Student, Human Genetics and Genomics  
+University of Miami
+
+## Citation
+
+If you use this pipeline in your research, please cite this repository:
+
+> Kim, S. (2026). *BAM Preparation and featureCounts Pipeline*. GitHub.  
+> https://github.com/stephkim-9411/bioinformatics-toolkit
+
+## Support
+
+If you find this repository helpful, please consider giving it a ⭐.
