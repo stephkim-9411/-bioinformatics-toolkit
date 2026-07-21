@@ -122,7 +122,7 @@ University of Miami
 
 If you use this pipeline in your research, please cite this repository:
 
-> Kim, S. (2026). *BAM Preparation and featureCounts Pipeline*. GitHub.  
+> Kim, S. (2026). *SRA Data Download Pipeline*. GitHub.  
 > https://github.com/stephkim-9411/bioinformatics-toolkit
 
 ## Support
