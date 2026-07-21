@@ -38,8 +38,6 @@ featureCounts_results/
 ├── gene_counts.txt
 └── gene_counts.txt.summary
 
-logs/
-└── featureCounts.log
 ```
 
 ### Notes
