@@ -111,3 +111,21 @@ The script reads each SRR accession and downloads the corresponding FASTQ files.
 ## Output
 
 After completion, FASTQ files will be saved in the `fastq/` directory.
+
+## Author
+
+**Stephanie Kim**  
+Ph.D. Student, Human Genetics and Genomics  
+University of Miami
+
+## Citation
+
+If you use this pipeline in your research, please cite this repository:
+
+> Kim, S. (2026). *BAM Preparation and featureCounts Pipeline*. GitHub.  
+> https://github.com/stephkim-9411/bioinformatics-toolkit
+
+## Support
+
+If you find this repository helpful, please consider giving it a ⭐.
+
