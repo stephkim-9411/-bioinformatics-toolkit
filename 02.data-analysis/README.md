@@ -323,6 +323,26 @@ Natural next modules include:
 - pathway visualization
 - enrichment using up- and down-regulated genes separately
 
+## Citation
+
+If you use or adapt this pipeline in your research, please cite the repository and the related publication in which this workflow was applied.
+
+### Repository
+
+> Kim, S. S. (2026). *RNA-seq Differential Expression and Functional Enrichment Tutorial in R*. GitHub.  
+> https://github.com/stephkim-9411/bioinformatics-toolkit
+
+### Related Publication
+
+> Kim SS, Lee SC, Lim B, Shin SH, Kim MY, Kim SY, Lim H, Charton C, Shin D, Moon HW, Kim J, Park D, Park WY, Lee JY. DNA methylation biomarkers distinguishing early-stage prostate cancer from benign prostatic hyperplasia. *Prostate International*. 2023;11(2):113–121. doi: [10.1016/j.prnil.2023.01.001](https://doi.org/10.1016/j.prnil.2023.01.001).
+
+### Copyable Citation
+
+```text
+Kim, S. S. (2026). RNA-seq Differential Expression and Functional Enrichment Tutorial in R. GitHub. https://github.com/stephkim-9411/bioinformatics-toolkit
+
+Kim SS, Lee SC, Lim B, Shin SH, Kim MY, Kim SY, Lim H, Charton C, Shin D, Moon HW, Kim J, Park D, Park WY, Lee JY. DNA methylation biomarkers distinguishing early-stage prostate cancer from benign prostatic hyperplasia. Prostate Int. 2023;11(2):113–121. doi:10.1016/j.prnil.2023.01.001.
+
 ## License / educational use
 
 This repository is intended as an educational template. Users should adapt the experimental design, filtering strategy, statistical thresholds, organism, and annotation resources to their own study.
