@@ -1,2 +1,0 @@
-"ID","Description","setSize","enrichmentScore","NES","pvalue","p.adjust","qvalue","rank","leading_edge","core_enrichment","log2err"
-"GO:0032868","response to insulin",26,-0.783710921645872,-1.9938664698437,2.50104173007041e-05,0.019858271336759,0.015560346668673,13,"tags=35%, list=13%, signal=41%","16476/11652/14281/26413/18708/26417/18706/13653/11651",0.575610261071129
