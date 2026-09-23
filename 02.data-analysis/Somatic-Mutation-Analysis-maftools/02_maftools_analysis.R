@@ -9,11 +9,10 @@ library(data.table)
 library(dplyr)
 library(ggplot2)
 
-
+# ============================================================
 # 4. Set paths and optional analyses
-
 # Save this script at your project root, with input files inside data/. Set your working directory to that folder before running the script.
-
+# ============================================================
 use_example <- TRUE
 maf_file <- "data/cohort.maf"  # Or data/oncokb_annotated.maf
 output_dir <- "results/maftools_example" # Change for each dataset/run
@@ -41,9 +40,10 @@ if (use_example) {
 }
 stopifnot(file.exists(maf_file), reference_build %in% c("hg19", "hg38"))
 
+# ============================================================
 # 5. Read and check the MAF
-
 # `read.maf()` builds a **MAF object**, which contains processed variants and summaries. Its `@data` slot holds variants classified as nonsynonymous by maftools; other classes are in `@maf.silent`. `useAll = TRUE` means that `Mutation_Status` is not used to filter rows; it does **not** mean all consequences appear in nonsynonymous plots. Only supply the intended, quality-filtered somatic dataset.
+# ============================================================
 
 maf_table <- data.table::fread(maf_file, skip = "Hugo_Symbol", sep = "\t")
 # Normalize the maftools AML example's column names without changing its variants.
@@ -75,10 +75,9 @@ mutation_maf
 
 # Repeated transcript annotations are deduplicated by maftools. Resolve contradictory annotations upstream; keeping the first duplicate does not adjudicate its biological interpretation. Check sample IDs and genome build before continuing.
 
+# ============================================================             
 # 6. Optional: include CNV as an alteration category
-
 # Here “CNV as a factor” means **Amp/Del categories in a combined oncoplot**. It does not mean fitting a statistical model with CNV as a covariate. The mutation-only object remains available for protein and positional analyses.
-
 # Provide a gene-level TSV with these input columns:
 
 # | Hugo_Symbol | Tumor_Sample_Barcode | Copy_Number_Alteration |
@@ -87,9 +86,9 @@ mutation_maf
 # | CDKN2A | Tumor02 | DeepDeletion |
 
 # These rows illustrate the format only. Segment-level CNVkit output needs gene assignment and justified copy-number calling first. Do not apply universal absolute-copy-number thresholds without considering caller definitions, purity, and ploidy.
-
 # The mapping below retains explicit amplification/deep-deletion calls. `Gain`, shallow loss, generic `Deletion`, and unknown labels are exported for review rather than silently recoded. Add mappings only after checking what your caller means. For thresholded GISTIC data, +2/-2 can represent amplification/deep deletion; do not apply that interpretation to raw copy numbers or log2 ratios.
-
+# ============================================================
+               
 cn_table <- NULL
 combined_maf <- NULL
 if (use_cnv) {
@@ -135,12 +134,12 @@ plot_maf <- if (use_cnv) combined_maf else mutation_maf
 
 # A sample absent from the retained CNV table may have no qualifying calls **or** may not have been assayed. Verify this with sample metadata. This simple tutorial stops on CNV-only sample IDs instead of silently changing the cohort denominator. Samples with no retained mutation or CNV require an explicit full-cohort manifest and careful denominator handling; do not add fake mutation rows.
 
+# ============================================================
 # 7. Oncoplots: genes by samples
-
 # Rows are genes; columns are samples; colors show alteration types. With CNV enabled, the plot also includes Amp/Del. Frequencies describe the represented MAF cohort and the selected alterations, not automatically every enrolled patient. `removeNonMutated = FALSE` retains represented samples without changes in the displayed genes.
-
 # A small helper displays a plot in R and saves it as a PDF. The saved output is redrawn, so plotting functions should not modify data.
-
+# ============================================================
+               
 show_and_save <- function(filename, draw, width = 12, height = 7) {
   draw()
   grDevices::pdf(file.path(output_dir, filename), width = width, height = height)
@@ -160,7 +159,6 @@ show_and_save("Oncoplot.pdf", function() {
 })
 
 # Optional gene panel and sample order
-
 # Change `selected_genes` in the settings. Samples can also be manually ordered with `sample_order <- c("A1", "A2", "A10")`; include all intended represented samples. Alphabetical order below is deliberately simple.
 
 plot_genes <- intersect(selected_genes, as.character(maftools::getGeneSummary(plot_maf)$Hugo_Symbol))
@@ -174,10 +172,11 @@ if (length(plot_genes)) {
   })
 }
 
+# ============================================================
 # 8. Mutation summary dashboard and tables
-
 # The dashboard summarizes mutation consequences, types, and per-sample counts. It uses the mutation-only object so CNV events are not mixed into sequence mutation counts. Counts are not tumor mutational burden (TMB): TMB requires an appropriate callable megabase denominator and filtering definition. `rmOutlier = TRUE` affects the display, not the underlying input.
-
+# ============================================================
+  
 show_and_save("Mutation_MAF_summary.pdf", function() {
   maftools::plotmafSummary(maf = mutation_maf, rmOutlier = TRUE,
     addStat = "median", dashboard = TRUE, titvRaw = FALSE)
@@ -195,10 +194,11 @@ if (use_cnv) {
                     file.path(output_dir, "Combined_sample_summary.csv"))
 }
 
+# ============================================================
 # 9. Protein lollipop plots for the top 20 genes
-
 # Lollipop plots place mutations along a protein and can reveal recurrent positions. They need interpretable protein-change annotations and compatible protein/transcript information. CNVs do not have amino-acid positions. Genes that cannot be plotted are recorded with the error message instead of being silently skipped.
-
+# ============================================================
+  
 plot_log <- data.frame(Analysis = character(), Item = character(), Message = character())
 if ("HGVSp_Short" %in% names(mutation_maf@data)) {
   local({
@@ -217,14 +217,13 @@ if ("HGVSp_Short" %in% names(mutation_maf@data)) {
   message("Lollipops skipped: HGVSp_Short is unavailable.")
 }
 
+# ============================================================
 # 10. Optional: OncoKB annotation and interpretation
-
 # For upstream annotation, see 01_MAF_preparation_and_annotation.md.
-
 # `ONCOGENIC` describes oncogenicity; `MUTATION_EFFECT` describes functional effect; `HIGHEST_LEVEL` records the highest returned therapeutic evidence level. Oncogenicity and treatment evidence are different concepts. R1/R2 indicate resistance, not sensitivity. Blank evidence is labeled **No reported level**, not “non-actionable.” Interpret annotations in their tumor context and record the annotation date/version.
-
 # These summaries count retained **variant–sample records**, not unique patients or globally unique alleles. They intentionally cover the nonsynonymous sequence variants in `mutation_maf@data`, matching the oncoplot. They do not summarize CNV treatment evidence.
-
+# ============================================================
+  
 oncogenic_maf <- NULL
 oncogenic_only <- NULL
 if (use_oncokb) {
@@ -253,9 +252,7 @@ if (use_oncokb) {
 }
 
 # The filtered MAF may omit samples with no qualifying records, changing its displayed denominator. Use a cohort manifest to calculate full-cohort prevalence. CNVs are not included in this filtered object: restricting CNVs to genes with oncogenic mutations does not establish the CNVs' oncogenicity. Annotate and filter each CNV independently if an oncogenic-CNV plot is needed.
-
 # Evidence-level and mutation-effect barplots
-
 # The original levels are preserved, including unexpected labels, so changed vocabularies do not become missing values. Each chart is saved as PDF and PNG, with its underlying CSV.
 
 if (!is.null(oncogenic_only) && nrow(oncogenic_only)) {
@@ -333,13 +330,13 @@ if (run_rainfall) {
 }
 data.table::fwrite(plot_log, file.path(output_dir, "Plot_error_log.csv"))
 
+# ============================================================
 # 12. Advanced optional analysis: SBS signatures
-
 # This section builds a 96-channel substitution-context matrix and explores signature extraction. Use all suitable quality-filtered somatic SNVs, including synonymous SNVs, not an oncogenic-only subset. Restricting to driver variants distorts the mutation spectrum. Small cohorts, few mutations, or targeted panels may not support reliable de novo extraction. Similarity to a reference signature does not prove a causal repair defect.
-
 # Install the matching reference package and NMF manually, then enable `run_signatures`. First inspect the rank diagnostics with `chosen_signature_n <- NULL`. Set a justified rank and rerun to extract signatures; four is not a universal choice.
-
 # Optional signature dependencies: run these manually once.
+# ============================================================
+  
 # install.packages("NMF")
 # # Choose ONE reference matching your data:
 # BiocManager::install("BSgenome.Hsapiens.UCSC.hg19")
@@ -377,9 +374,10 @@ if (run_signatures) {
             file.path(output_dir, "SBS_results.rds"))
   }
 }
-
+  
+# ============================================================
 # 13. Save reproducibility information
-
+# ============================================================
 saveRDS(list(mutations = mutation_maf, combined = combined_maf, oncogenic = oncogenic_maf),
         file.path(output_dir, "MAF_objects.rds"))
 writeLines(capture.output(sessionInfo()), file.path(output_dir, "sessionInfo.txt"))
